@@ -1,10 +1,8 @@
-package com.spring.boot.app.music;
+package com.spring.boot.app.song;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +15,7 @@ public class SongController {
 
 
     @RequestMapping("/songs")
-    public List<Song> getAllSongs(){
+    public List<String> getAllSongs(){
         return songService.getAllSongs();
     }
     @RequestMapping("/songs/{id}")
@@ -44,3 +42,5 @@ public class SongController {
     }
 
 }
+
+
