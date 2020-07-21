@@ -19,47 +19,36 @@ public class Start {
         this.userRepository=userRepository;
         this.songRepository= songRepository;
 
-        userRepository.deleteAll();
-        songRepository.deleteAll();
 
-        User user = new User();
-        user.setUsername("ania");
-        user.setPassword(passwordEncoder.encode("ania"));
-        user.setRole("ADMIN");
-        userRepository.save(user);
 
-        User user2 = new User();
-        user2.setUsername("user");
-        user2.setPassword(passwordEncoder.encode("user"));
-        user2.setRole("USER");
-       // userRepository.save(user2);
+        User user = new User("user", passwordEncoder.encode("user"),"USER");
 
-        Song song = new Song();
-        song.setTitle("aaaa");
-        song.setArtist("bbbbbbbbb");
-        Song song2 = new Song();
-        song2.setTitle("yyyyy");
-        song2.setArtist("yyyy");
 
-        Song song3 = new Song();
-        song3.setTitle("zzzzzz");
-        song3.setArtist("zzzz");
-        Song song4 = new Song();
-        song4.setTitle("ooooooooo");
-        song4.setArtist("ooooooo");
+        User user2 = new User("admin",passwordEncoder.encode("admin"), "ADMIN");
+
+
+        User user3 = new User("user2",passwordEncoder.encode("user2"), "USER");
+
+
+        Song song = new Song("Baśka", "Wilki");
+
+        Song song2 = new Song("Dancing Queen", "ABBA");
+
+        Song song3 = new Song("I want it all", "Queen");
+
+        Song song4 = new Song("Physical", "Dua Lipa");
+
         songRepository.saveAndFlush(song);
         songRepository.saveAndFlush(song2);
-        songRepository.saveAndFlush(song3);
-        songRepository.saveAndFlush(song4);
 
-       // user.addProduct(song);
-        user.getSongs().add(song);
-        user.getSongs().add(song2);
-        //song.getUsers().add(user);
-        userRepository.saveAndFlush(user);
-        //songRepository.save(song);
-        //song.addUser(user);
-        //songRepository.save(song);
+       user.addSong(song);
+       user.addSong(song2);
+       userRepository.saveAndFlush(user);
+       userRepository.saveAndFlush(user2);
+       userRepository.saveAndFlush(user3);
+       songRepository.saveAndFlush(song3);
+       songRepository.saveAndFlush(song4);
+
     }
 }
 

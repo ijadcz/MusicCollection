@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 public class SongController {
@@ -15,29 +15,29 @@ public class SongController {
 
 
     @RequestMapping("/songs")
-    public List<String> getAllSongs(){
+    public List<Song> getAllSongs(){
         return songService.getAllSongs();
     }
     @RequestMapping("/songs/{id}")
-    public Optional<Song> getSong (@PathVariable long id){
+    public Song getSong (@PathVariable long id){
 
         return songService.getSong(id);
     }
-    @RequestMapping(method = RequestMethod.POST, value = "/add")
+    @RequestMapping(method = RequestMethod.POST, value = "songs/add")
     public void addSong(@RequestBody Song song){
         songService.addSong(song);
 
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/update/{id}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/songs/{id}")
     public void updateSong(@RequestBody Song song, @PathVariable long id){
         songService.updateSong(id, song);
 
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{id}")
-    public void deleteSong(@RequestBody Song song, @PathVariable long id){
-        songService.deleteSong(id);
+    @RequestMapping(method = RequestMethod.DELETE, value = "/songs/{id}")
+    public void deleteSong(/*@RequestBody Song song,*/ @PathVariable long id){
+        songService.removeSong(id);
 
     }
 

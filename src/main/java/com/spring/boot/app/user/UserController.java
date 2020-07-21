@@ -1,12 +1,12 @@
 package com.spring.boot.app.user;
 
 import com.spring.boot.app.song.Song;
+import com.spring.boot.app.song.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -14,40 +14,52 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private SongService songService;
 
 
     @RequestMapping("/{username}/playlist")
-    public List<String> getPlaylist(@PathVariable  String username)throws Exception {
+    public Set<Song> getPlaylist(@PathVariable  String username) {
+
+       userService.validateUser(username);
     Set<Song> songs= userService.getPlaylist(username);
     ArrayList<String> titles= new ArrayList<>();
 
-  for(Song s: songs){
-     titles.add( s.getTitle());
-  }
-
-
-
-
-
-
-      return   titles;
+      return   songs;
 
 
     }
-    /*
-    @RequestMapping("/playlist")
-    public Set<Song> getPlaylist(UserService userService){
-            String username;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof User) {
-             username = ((UserDetails)principal).getUsername();
-        } else {
-             username = principal.toString();
-        }
-       return userService.getPlaylist(username);
+
+
+
+
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/{username}/playlist/{id}")
+    public void addSongToPlaylist(@PathVariable  String username,@PathVariable long id){
+        userService.validateUser(username);
+
+        User user = userService.loadUser(username);
+        Song s =songService.getSong(id);
+
+
+        user.getSongs().add(s);
+        userService.updateUser(user);
+
+
     }
 
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{username}/playlist/{id}")
+    public void deleteSongFromPlaylist(@PathVariable  String username,@PathVariable long id){
+        userService.validateUser(username);
 
-*/
+        User user = userService.loadUser(username);
+        Song s =songService.getSong(id);
+        user.getSongs().remove(s);
+
+
+        userService.updateUser(user);
+
+
+    }
 
 }

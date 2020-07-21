@@ -1,9 +1,7 @@
 package com.spring.boot.app.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring.boot.app.song.Song;
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Entity
@@ -11,17 +9,12 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-   // @Column(name = "user_id")
     private  long id;
     private String username;
     private String password;
     private String role;
-/*
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinTable(name = "user_songs",
-    joinColumns = {@JoinColumn(name = "id")},
-    inverseJoinColumns = {@JoinColumn(name = "id")})*/
-    @ManyToMany//( cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+
+    @ManyToMany
     private Set<Song> songs = new HashSet<>();
 
     public Set<Song> getSongs() {
@@ -32,12 +25,12 @@ public class User {
         this.songs = songs;
     }
 
-    public void addProduct(Song p) {
+    public void addSong(Song p) {
         this.songs.add(p);
         p.getUsers().add(this);
     }
 
-    public void removeProduct(Song p) {
+    public void removeSong(Song p) {
         this.songs.remove(p);
         p.getUsers().remove(this);
     }
@@ -84,7 +77,7 @@ public class User {
         return password;
     }
 
-    //@Override
+
     public String getUsername() {
         return username;
     }

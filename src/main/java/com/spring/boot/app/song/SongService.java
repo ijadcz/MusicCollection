@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class SongService {
@@ -17,57 +16,73 @@ public class SongService {
     @Autowired
     private UserRepository userRepository;
 
-    // private List<Song> songs = new ArrayList<>(Arrays.asList( new Song(0, "aaaaaaaaaa", "bbbbb"), new Song(1, "ccccccccccc","ddddddd")));
+
 
 
     public SongService(SongRepository songRepository, UserRepository userRepository) {
         this.songRepository = songRepository;
-        this.userRepository= userRepository;
+        this.userRepository = userRepository;
     }
 
-    public List<String> getAllSongs() {
+    public List<Song> getAllSongs() {
 //    return songs;
         List<Song> songs = new ArrayList<>();
         songRepository.findAll().forEach(songs::add);
-        List<String> titles= new ArrayList<>();
-        for(int a=0; a<songs.size();a++) {
-            titles.add(songs.get(a).getTitle());
-        }
-        return titles;
+
+        return songs;
     }
 
-    public Optional<Song> getSong(long id) {
-        return songRepository.findById(id);
-        //return songs.stream().filter(s -> s.getId()==id).findFirst().get();
-
-
+    public Song getSong(long id) {
+        return songRepository.findById(id).orElseThrow(() -> new SongException(id));
     }
+
+
+
 
     public void addSong(Song song) {
 
-        //songs.add(song);
         songRepository.save(song);
     }
 
 
     public void updateSong(long id, Song song) {
         songRepository.save(song);
-    /*
-        for (int a=0; a< songs.size(); a++) {
-            if(songs.get(a).getId()==id){
-                songs.set(a,song);
-            }
-        }*/
+
     }
 
-
+/*
     public void deleteSong(long id) {
 
         songRepository.deleteById(id);
+        songRepository.flush();
+        userRepository.flush();
 
         // songs.removeIf(s -> s.getId()==id);
     }
+*/
+    public void removeSong(long id){
+    Song song = new Song();
 
+        song=songRepository.findById(id).orElse(song);
+
+    System.out.println(song.getId());
+    System.out.println(id);
+
+
+
+    for (User user : song.getUsers()) {
+        user.removeSong(song);
+
+
+
+    }
+
+
+        songRepository.delete(song);
+    songRepository.flush();
+        userRepository.flush();
+
+    }
 
 }
 
