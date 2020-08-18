@@ -46,7 +46,14 @@ public class SongService {
 
 
     public void updateSong(long id, Song song) {
-        songRepository.save(song);
+
+
+        Song song2 = songRepository.findById(id).get();
+        song2.setArtist(song.getArtist());
+        song2.setTitle(song.getTitle());
+        songRepository.save(song2);
+
+
 
     }
 

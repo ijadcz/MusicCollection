@@ -23,7 +23,7 @@ public class SongController {
 
         return songService.getSong(id);
     }
-    @RequestMapping(method = RequestMethod.POST, value = "songs/add")
+    @RequestMapping(method = RequestMethod.POST, value = "/songs/add")
     public void addSong(@RequestBody Song song){
         songService.addSong(song);
 
@@ -36,7 +36,7 @@ public class SongController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/songs/{id}")
-    public void deleteSong(/*@RequestBody Song song,*/ @PathVariable long id){
+    public void deleteSong(/*@RequestBody Song song,*/@PathVariable long id){
         songService.removeSong(id);
 
     }
